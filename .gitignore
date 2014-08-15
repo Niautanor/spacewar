@@ -1,0 +1,11 @@
+bin/
+res/
+!res/space
+*.png
+lwjgl
+
+.classpath
+.project
+.settings/
+
+roguelike\ stuff/
