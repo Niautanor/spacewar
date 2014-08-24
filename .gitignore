@@ -1,6 +1,4 @@
 bin/
-res/
-!res/space
 *.png
 lwjgl
 
