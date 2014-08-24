@@ -33,10 +33,14 @@ public class Shader {
 		glCompileShader(vshader);
 		glCompileShader(fshader);
 		
+		System.out.println("Vertex Shader compiled:\n" + glGetShaderInfoLog(vshader, 2048));
+		System.out.println("Fragment Shader compiled:\n" + glGetShaderInfoLog(fshader, 2048));
+		
 		glAttachShader(prog, vshader);
 		glAttachShader(prog, fshader);
 		
 		glLinkProgram(prog);
+		glValidateProgram(prog);
 		
 		//Print linking log
 		System.out.println("Program linked:\n" + glGetProgramInfoLog(prog, 2048));

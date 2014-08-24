@@ -9,6 +9,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.util.glu.GLU;
 
 class Main {
 	public static void main(String[] args) {
@@ -30,7 +31,7 @@ class Main {
 		try {
 			game.init();
 		} catch (Exception e) {
-			System.out.println("Error initializing Game " + e.getMessage());
+			System.out.println("Error initializing Game: " + e.getMessage());
 			e.printStackTrace();
 			System.exit(-1);
 		}
@@ -70,7 +71,7 @@ class Main {
 		int errorValue = GL11.glGetError();
 
 		if (errorValue != GL11.GL_NO_ERROR) {
-			String errorString = "Da hast du wohl die Arschkarte gezogen";
+			String errorString = GLU.gluErrorString(errorValue);
 			System.err.println("ERROR - " + errorMessage + ": " + errorString);
 
 			if (Display.isCreated())

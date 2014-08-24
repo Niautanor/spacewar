@@ -10,6 +10,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.glu.GLU;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.*;
@@ -56,10 +57,11 @@ public class TextureManager {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tWidth, tHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tWidth, tHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, buf);
 		
-		if (glGetError() != GL_NO_ERROR) {
-			throw new IOException("couldn't create texture");
+		int error = glGetError();
+		if (error != GL_NO_ERROR) {
+			throw new IOException("couldn't create texture. " + GLU.gluErrorString(error));
 		}
 		return new Texture(texId);
 	}
