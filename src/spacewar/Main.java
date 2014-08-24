@@ -49,12 +49,12 @@ class Main {
 				game.render();
 				
 				Display.update();
-				//10 fps for debugging
-				//Display.sync(5);
 				exitOnGLError("Rendering");
 				
 				t2 = Sys.getTime();
 				delta = ((double) (t2 - t1)) / Sys.getTimerResolution();
+				//debugging
+				if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) delta *= 0.1d;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
