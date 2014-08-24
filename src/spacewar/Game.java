@@ -27,7 +27,8 @@ public class Game {
 	// testing
 	private Sinusthing x, y;
 	private Sprite screen;
-	private int frag_color;
+	private int alphaTestLocation;
+	private TextureManager textureManager;
 
 	public Game() {
 		shader = new Shader();
@@ -45,10 +46,13 @@ public class Game {
 		occlusionQuery = glGenQueries();
 
 		// testing
-		x = new Sinusthing(false, true);
-		y = new Sinusthing(true, false);
-		screen = new Sprite(2.0f, 2.0f, 0.0f, 0.0f, 0.0f);
-		frag_color = shader.getUniformLoc("frag_color");
+		textureManager = new TextureManager();
+		Texture tex1 = textureManager.getTexture("res/spaceship.png");
+		Texture tex2 = textureManager.getTexture("res/white.png");
+		x = new Sinusthing(false, true, tex1);
+		y = new Sinusthing(true, false, tex1);
+		screen = new Sprite(2.0f, 2.0f, 0.0f, 0.0f, 0.0f, tex2);
+		alphaTestLocation = shader.getUniformLoc("alpha_test");
 	}
 
 	public void cleanup() {
@@ -62,17 +66,27 @@ public class Game {
 		glColorMask(true, true, true, true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-		glUniform3f(frag_color, 1.0f, 0.0f, 0.0f);
-
+		//that means almost no fragment will be discarded
+		//except for those with 0.0f as alpha
+		glUniform1f(alphaTestLocation, 0.1f);
+		
 		glEnable(GL_STENCIL_TEST);
 		glStencilFunc(GL_ALWAYS, 0, 0);
 		glStencilOp(GL_INCR, GL_INCR,GL_INCR);
+		
+		//depth test enabled could cause z fighting
+		//I don't want z fighting
+		glDisable(GL_DEPTH_TEST);
+		
+		//blending to get cool transparency effects
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+		//render the objects
 		x.render();
 		y.render();
-
+		
 		glStencilFunc(GL_EQUAL, 2, 0xFF);
-		glUniform3f(frag_color, 0.0f, 1.0f, 0.0f);
 		screen.render();
 
 	}
@@ -97,6 +111,12 @@ public class Game {
 			// in the stencil buffer
 			glStencilFunc(GL_ALWAYS, 1, 1);
 			glStencilOp(GL_REPLACE, GL_REPLACE, GL_REPLACE);
+			
+			//only pixels with an alpha value above .5 will be considered
+			glUniform1f(alphaTestLocation, 0.5f);
+			
+			//blending could cause unwanted effects
+			glDisable(GL_BLEND);
 
 			// render a into the stencil buffer
 			a.render();

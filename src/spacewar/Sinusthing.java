@@ -8,8 +8,8 @@ public class Sinusthing implements Collidable {
 	private Sprite sprite;
 	private boolean x,y;
 	
-	public Sinusthing(boolean x, boolean y) {
-		sprite = new Sprite(0.25f,0.25f,0.0f,0.0f,0.0f);
+	public Sinusthing(boolean x, boolean y, Texture tex) {
+		sprite = new Sprite(0.25f,0.25f,0.0f,0.0f,0.0f, tex);
 		this.x = x;
 		this.y = y;
 		t = 0;
