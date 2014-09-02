@@ -17,7 +17,7 @@ class Main {
 		ContextAttribs attribs = new ContextAttribs(3, 2)
 				.withForwardCompatible(true).withProfileCore(true);
 		try {
-			Display.setDisplayMode(new DisplayMode(400, 400));
+			Display.setDisplayMode(new DisplayMode(1280, 720));
 			Display.create(pixelFormat, attribs);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
@@ -26,7 +26,7 @@ class Main {
 
 		exitOnGLError("Init");
 
-		Game game = new Game();
+		Game game = new Game(1280,720);
 
 		try {
 			game.init();

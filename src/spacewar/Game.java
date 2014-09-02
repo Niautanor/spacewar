@@ -20,9 +20,12 @@ import org.lwjgl.util.vector.Vector2f;
 
 public class Game {
 	private Shader shader;
+	//window width / height
+	private int WW,WH;
 
 	// unsure
 	private int occlusionQuery;
+	private ShaderMatrix4f projectionMatrix, viewMatrix;
 
 	// testing
 	private Sinusthing x, y;
@@ -30,9 +33,17 @@ public class Game {
 	private int alphaTestLocation;
 	private TextureManager textureManager;
 
-	public Game() {
+	public Game(int width, int height) {
 		shader = new Shader();
+		WW = width;
+		WH = height;
+		
 		occlusionQuery = 0;
+		
+		projectionMatrix = new ShaderMatrix4f();
+		
+		//currently unused
+		viewMatrix = new ShaderMatrix4f();
 	}
 
 	public void init() throws Exception {
@@ -43,7 +54,21 @@ public class Game {
 				shader.getAttribLoc("iTex"),
 				shader.getUniformLoc("modelMatrix"));
 
+		//unsure - probably yes
 		occlusionQuery = glGenQueries();
+		
+		//initialize an orthogonal projection
+		projectionMatrix.setIdentity();
+		projectionMatrix.m00 = 2.0f / WW;
+		projectionMatrix.m11 = 2.0f / WH;
+		
+		//I currently don't have a camera //just some zoom so that you can see something
+		viewMatrix.setIdentity();
+		viewMatrix.m00 = 360.0f;
+		viewMatrix.m11 = 360.0f;
+		
+		projectionMatrix.setLocation(shader.getUniformLoc("projectionMatrix"));
+		viewMatrix.setLocation(shader.getUniformLoc("viewMatrix"));
 
 		// testing
 		textureManager = new TextureManager();
@@ -56,11 +81,15 @@ public class Game {
 	}
 
 	public void cleanup() {
-		shader.cleanup();
 		shader.unbind();
+		shader.cleanup();
 	}
 
 	public void render() throws Exception {
+		//set projection and view matrices
+		projectionMatrix.setUniform();
+		viewMatrix.setUniform();
+		
 		//glColorMask effects glClear
 		//if I didn't put this here it would create artifacts when collision detection sets the color mask to 0
 		glColorMask(true, true, true, true);
@@ -96,6 +125,10 @@ public class Game {
 				.pow(a.getRadius() + b.getRadius(), 2)) {
 			// Pixel perfect collision detection taken from
 			// https://code.google.com/p/tf4r/wiki/PixelPerfectCollisionDetection
+			
+			//set projection and view matrices
+			projectionMatrix.setUniform();
+			viewMatrix.setUniform();
 
 			// clear the stencil buffer
 			glClear(GL_STENCIL_BUFFER_BIT);

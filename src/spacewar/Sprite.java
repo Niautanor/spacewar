@@ -42,8 +42,7 @@ public class Sprite implements Collidable {
 	private float radius;
 	
 	private Texture tex;
-	private Matrix4f modelMatrix;
-	private FloatBuffer modelMatrixBuffer;
+	private ShaderMatrix4f modelMatrix;
 	
 	private static int modelMatrixUniformLocation = -1;
 	private static int posAttribLocation = -1;
@@ -82,15 +81,14 @@ public class Sprite implements Collidable {
 		//signal that we are done writing to the buffer
 		vertexBuffer.flip();
 		
-		modelMatrix = new Matrix4f();
+		modelMatrix = new ShaderMatrix4f();
+		modelMatrix.setLocation(modelMatrixUniformLocation);
 		pos = new Vector2f();
 		
 		pos.x = x;
 		pos.y = y;
 		radius = (float) Math.sqrt(width*width+height*height);
 		rot = rotation;
-		
-		modelMatrixBuffer = BufferUtils.createFloatBuffer(16);
 		
 		//generate and bind a vertex Array
 		//a vertex Array stores all the information required to render an object
@@ -130,9 +128,7 @@ public class Sprite implements Collidable {
 		modelMatrix.setIdentity();
 		modelMatrix.translate(pos);
 		modelMatrix.rotate(rot, new Vector3f(0,0,1));
-		modelMatrix.store(modelMatrixBuffer);
-		modelMatrixBuffer.flip();
-		glUniformMatrix4(modelMatrixUniformLocation, false, modelMatrixBuffer);
+		modelMatrix.setUniform();
 		
 		tex.bind();
 		
