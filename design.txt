@@ -1,0 +1,60 @@
+Spacewar (working title)
+
+Setting:
+A solar system with two factions that are constantly at war with each other.
+Both have developed interplanetary spaceflight but are still constrained
+ by fuel requirements.
+There are numerous space stations and docks in orbit around the planets.
+Big transport ships carry smaller fighter craft to enemy installations.
+Planets and space stations get captured by infantry that has to get there
+ with dropships.
+Planets will in most cases have to be weakened by bombers beforehand.
+Pilots have to conserve their fuel unless they want risk getting captured
+ by the enemy or burning up in the atmosphere.
+(Ammunition also has to be conserved)
+
+Gameplay:
+The player starts a fighter pilot for one faction but can be promoted into higher ranks.
+Some possible ranks are:
+ Fighter pilot (start)
+ Bomber/Corvette pilot
+ Dropship pilot
+ Transport captain
+ Battleship captain
+ Fleet admiral (command other ships in a fleet)
+ 1. Admiral (command all fleets of the faction)
+The player wins if his faction controls all planets/stations in the system.
+The player looses if he dies or if his faction no longer owns any planets/stations (and no infantry?).
+
+Physic simulation:
+Full newtonian physics
+(should planets be movable too? The problem with this would be the missing accuracy of floating point calculations)
+Firing weapons creates recoil that will move smaller ships.
+Atmosspheres burn up ships if they enter to fast.
+Debris remains in orbit and collides with combatants.
+How do collisions in space work? (in terms of changes in velocity and impact force)
+
+Damage simulation:
+Health bars (other stuff might be cool but would be to difficult to implement)
+Repairs are free but take time (the game will be sped up during the repair)
+During the repairs the player will keep track of the war with news bulletins
+ (like "Delta fleet successfully captured Magrathea")
+
+Combat:
+Fighters/Bombers only have a main engine and reaction wheels.
+Battleships and Transporters have rcs and more lateral control.
+Fighters can only fire in a fixed direction while bigger ships have turrets that automatically fire on enemy ships in range.
+Corvettes will still have main guns though.
+
+Economy:
+Empires gain resources by controling planets.
+These resources will be spent on building new ships and space stations.
+The player gains reknown by serving his empire.
+Reknown can be spend on better ships/equipment.
+
+Influence leaders(not in the prototype):
+reknown can also be spend to influence the building of planetary installations and space stations 
+
+Graphics:
+either 2D (circular planets and flat orbits)
+or 3D (like kerbal space program)
